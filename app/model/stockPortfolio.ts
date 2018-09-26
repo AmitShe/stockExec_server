@@ -10,5 +10,8 @@ export class stockPortfolio extends Model<stockPortfolio>{
     name!: string;
     @Column(DataType.DOUBLE)
     stockOwned!: number;
+    @Column(DataType.DOUBLE)
+    avgBuyingPrice: number;
+
 }
 export default stockPortfolio;

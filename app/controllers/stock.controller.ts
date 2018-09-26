@@ -26,17 +26,24 @@ export class StockController {
         };
     }
 
-    @Get("/buy/:stocksymbol/:quantityToBuy")
-    async buyStock(@Param("stocksymbol") stocksymbol: string, @Param("quantityToBuy") quantityToBuy: number) {
-        stockLogic.addToHistory(stocksymbol, quantityToBuy);
-        stockLogic.addToPortfolio(stocksymbol, quantityToBuy);
+    @Get("/buy/:stocksymbol/:quantityToBuy/:buyingPrice/:cost")
+    async buyStock(@Param("stocksymbol") stocksymbol: string, @Param("quantityToBuy") quantityToBuy: number, @Param("buyingPrice") buyingPrice: number, @Param("cost") cost: number) {
+        stockLogic.addToHistory(stocksymbol, quantityToBuy, cost);
+        stockLogic.addToPortfolio(stocksymbol, quantityToBuy, buyingPrice);
         return this.getAllStocks();
     }
 
-    @Get("/sell/:stocksymbol/:quantityToSell")
-     sellStock(@Param("stocksymbol") stocksymbol: string, @Param("quantityToSell") quantityToSell: number) {
-        stockLogic.addToHistory(stocksymbol, quantityToSell * -1);
-        stockLogic.addToPortfolio(stocksymbol, quantityToSell * -1);
+    @Get("/sell/:stocksymbol/:quantityToSell/:Profit")
+     sellStock(@Param("stocksymbol") stocksymbol: string, @Param("quantityToSell") quantityToSell: number, @Param("Profit") Profit: number) {
+        stockLogic.addToHistory(stocksymbol, quantityToSell * -1, Profit);
+        stockPortfolio.find({
+            where: {
+                symbol: stocksymbol
+            }
+        }
+        ).then(stockToAddTo => {
+        stockLogic.addToPortfolio(stocksymbol, quantityToSell * -1, stockToAddTo.avgBuyingPrice);
+        });
         return this.getAllStocks();
     }
 

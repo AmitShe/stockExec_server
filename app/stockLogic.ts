@@ -4,7 +4,7 @@ import StockHistory from "./model/stockOwned";
 
 export class stockLogic {
 
-    static addToPortfolio(stocksymbol: string, quantityToBuy: number) {
+    static addToPortfolio(stocksymbol: string, quantityToBuy: number, buyingPrice: number) {
         stockPortfolio.find({
             where: {
                 symbol: stocksymbol
@@ -13,13 +13,18 @@ export class stockLogic {
         ).then(async stockToAddTo => {
             if (stockToAddTo != null) {
                 const oldStockQuantity = stockToAddTo.dataValues.stockOwned;
+                const oldStockAvgPrice = stockToAddTo.dataValues.avgBuyingPrice;
                 if (oldStockQuantity != null && (quantityToBuy + oldStockQuantity) != 0) {
-                    stockPortfolio.update({
-                        stockOwned: quantityToBuy + oldStockQuantity
+                    const avgPrice = (( (oldStockAvgPrice * oldStockQuantity ) + 
+                    ( buyingPrice *  quantityToBuy ) ) 
+                    / (oldStockQuantity + quantityToBuy) );
+                    await stockPortfolio.update({
+                        stockOwned: quantityToBuy + oldStockQuantity,
+                        avgBuyingPrice: avgPrice
                     }, { where: { symbol: stocksymbol } })
                 }
                 else if ((oldStockQuantity != null && quantityToBuy + oldStockQuantity) === 0) {
-                    stockPortfolio.destroy({
+                    await stockPortfolio.destroy({
                         where: {
                             symbol: stocksymbol
                         }
@@ -37,7 +42,8 @@ export class stockLogic {
                         const newToPortfolio = new stockPortfolio({
                             symbol: stockToAdd.symbol,
                             name: stockToAdd.name,
-                            stockOwned: quantityToBuy
+                            stockOwned: quantityToBuy,
+                            avgBuyingPrice: stockToAdd.currentPrice
                         });
                         await newToPortfolio.save();
                     }
@@ -47,7 +53,7 @@ export class stockLogic {
         );
     }
 
-    static addToHistory(stocksymbol: string, quantityToBuy: number) {
+    static addToHistory(stocksymbol: string, quantityToBuy: number, profitForDeal: number) {
         Stock.find({
             where: {
                 symbol: stocksymbol
@@ -58,6 +64,7 @@ export class stockLogic {
                     symbol: stockToAdd.symbol,
                     numberOfStockBuySell: quantityToBuy,
                     buyingPrice: stockToAdd.currentPrice,
+                    profitPerDeal: profitForDeal,
                     dateOfPurchase: Date.now()
                 });
                 await newHistory.save()
@@ -92,6 +99,7 @@ export class stockLogic {
             symbol: `aaa`,
             numberOfStockBuySell: 12,
             buyingPrice: 10,
+            profitPerDeal: -120,
             dateOfPurchase: Date.now()
         });
         await stock13.save()
@@ -99,6 +107,7 @@ export class stockLogic {
             symbol: `ccc`,
             numberOfStockBuySell: 6,
             buyingPrice: 15,
+            profitPerDeal: -90,
             dateOfPurchase: Date.now()
         });
         await stock15.save()
@@ -106,20 +115,23 @@ export class stockLogic {
             symbol: `aaa`,
             numberOfStockBuySell: 7,
             buyingPrice: 16,
+            profitPerDeal: -112,
             dateOfPurchase: Date.now()
         });
         await stock16.save()
         const stock17 = new stockPortfolio({
             symbol: `aaa`,
             name: `amit`,
-            stockOwned: 19
+            stockOwned: 19,
+            avgBuyingPrice: 11
         });
         console.log(stock17);
         await stock17.save()
         const stock18 = new stockPortfolio({
             symbol: `ccc`,
             name: `amit3`,
-            stockOwned: 6
+            stockOwned: 6,
+            avgBuyingPrice: 13
         });
         await stock18.save()
     }

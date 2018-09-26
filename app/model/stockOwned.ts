@@ -11,5 +11,7 @@ export class StockHistory extends Model<StockHistory> {
     buyingPrice!: number;
     @Column(DataType.DOUBLE)
     dateOfPurchase!: number;
+    @Column(DataType.DOUBLE)
+    profitPerDeal!: number;
 }
 export default StockHistory;
