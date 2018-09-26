@@ -37,8 +37,7 @@ export class StockController {
      sellStock(@Param("stocksymbol") stocksymbol: string, @Param("quantityToSell") quantityToSell: number) {
         stockLogic.addToHistory(stocksymbol, quantityToSell * -1);
         stockLogic.addToPortfolio(stocksymbol, quantityToSell * -1);
-
-        return { stockName: stocksymbol, stockQuantity: quantityToSell };
+        return this.getAllStocks();
     }
 
     constructor() {

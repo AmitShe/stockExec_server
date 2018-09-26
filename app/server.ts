@@ -16,7 +16,7 @@ let socket = null;
     io.on('connection', (x: any) => {
         console.log('a user connected');
         socket = x;
-        setInterval(() => socketService.updateStockPrices(socket),5000);
+        setInterval(() => socketService.updateStockPrices(socket),3000);
     });
     io.on('disconnect', () => {
         console.log('user disconnected');
