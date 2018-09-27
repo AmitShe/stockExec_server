@@ -99,7 +99,7 @@ export class stockLogic {
             symbol: `aaa`,
             numberOfStockBuySell: 12,
             buyingPrice: 10,
-            profitPerDeal: -120,
+            profitPerDeal: 0,
             dateOfPurchase: Date.now()
         });
         await stock13.save()
@@ -107,7 +107,7 @@ export class stockLogic {
             symbol: `ccc`,
             numberOfStockBuySell: 6,
             buyingPrice: 15,
-            profitPerDeal: -90,
+            profitPerDeal: 0,
             dateOfPurchase: Date.now()
         });
         await stock15.save()
@@ -115,7 +115,7 @@ export class stockLogic {
             symbol: `aaa`,
             numberOfStockBuySell: 7,
             buyingPrice: 16,
-            profitPerDeal: -112,
+            profitPerDeal: 0,
             dateOfPurchase: Date.now()
         });
         await stock16.save()

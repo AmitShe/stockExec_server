@@ -1,7 +1,6 @@
 import { Sequelize } from 'sequelize-typescript';
 // console.log('2')
 syncDataBase().catch(function(err) {
-    // print the error details
     console.log(err);}
 );
 
@@ -9,7 +8,6 @@ async function syncDataBase(): Promise<any> {
   // console.log('1')
  const sequelize = await new Sequelize({
   dialect: 'postgres',
-  // operatorsAliases: false,
   operatorsAliases: Sequelize.Op as any,
   database: 'stockDB',
   username: 'amit',
